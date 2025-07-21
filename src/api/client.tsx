@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // 仅在开发环境引入Mockjs
-if (process.env.NODE_ENV === 'development') {
-  import('@/mock');
-}
+//if (process.env.NODE_ENV === 'development') {
+import('@/mock');
+//}
 import axios from 'axios';
 import { Modal } from 'antd';
 import { globalConfig } from '@/globalConfig';

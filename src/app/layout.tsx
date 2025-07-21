@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 
 import '@/common/styles/frame.scss';
 import AntdClientProvider from './antdClientProvider';
+import { ThemeProvider } from '@/components/themeContext';
 
 export const metadata: Metadata = {
   title: 'Simon Next_App',
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AntdClientProvider>{children}</AntdClientProvider>
+        <ThemeProvider>
+          <AntdClientProvider>{children}</AntdClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,3 +1,9 @@
+import ServerList from './serverList';
+
 export default function Home() {
-  return <div className="">Home页面</div>;
+  return (
+    <div className="P-home">
+      <ServerList />
+    </div>
+  );
 }

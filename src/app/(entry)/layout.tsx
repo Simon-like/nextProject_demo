@@ -20,8 +20,10 @@ async function privateRoute() {
 
 export default async function Entry({
   children,
+  detailModal,
 }: Readonly<{
   children: React.ReactNode;
+  detailModal: React.ReactNode;
 }>) {
   // 路由守卫：登录鉴权
   await privateRoute();
@@ -40,6 +42,7 @@ export default async function Entry({
           <Sider />
           <div style={{ overflow: 'auto', flex: 1, padding: 10 }}>
             {children}
+            {detailModal}
           </div>
         </Layout>
       </Layout>

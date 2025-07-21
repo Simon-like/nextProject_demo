@@ -9,14 +9,20 @@ import {
   MoonOutlined,
   BgColorsOutlined,
 } from '@ant-design/icons';
-
+import ThemeModal from '@/components/themeModal';
 import { globalConfig } from '@/globalConfig';
 import { logout, getLocalLoginInfo } from '@/api/client';
-
+import { useTheme } from '@/components/themeContext';
 import logoImg from '@/common/images/logo.png';
 import './header.scss';
 
 export default function Header() {
+  // 引入主题上下文的hook
+  const { dark, setDark } = useTheme();
+
+  // 是否显示主题色Modal
+  const [showThemeModal, setShowThemeModal] = useState(false);
+
   // Antd的Modal组件API
   const [modal, contextHolder] = Modal.useModal();
 
@@ -60,6 +66,35 @@ export default function Header() {
           <span className="logo-text">Next.js APP</span>
         </div>
         <div className="header-con">
+          {dark ? (
+            <Button
+              icon={<SunOutlined />}
+              shape="circle"
+              onClick={() => {
+                setDark(false);
+              }}
+            ></Button>
+          ) : (
+            <Button
+              icon={<MoonOutlined />}
+              shape="circle"
+              onClick={() => {
+                setDark(true);
+              }}
+            ></Button>
+          )}
+
+          {globalConfig.customColorPrimarys &&
+            globalConfig.customColorPrimarys.length > 0 && (
+              <Button
+                icon={<BgColorsOutlined />}
+                shape="circle"
+                onClick={() => {
+                  setShowThemeModal(true);
+                }}
+              ></Button>
+            )}
+
           {loginInfo && (
             <Dropdown menu={{ items: menuItems }}>
               <div className="user-menu">
@@ -70,6 +105,14 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      {showThemeModal && (
+        <ThemeModal
+          onClose={() => {
+            setShowThemeModal(false);
+          }}
+        />
+      )}
 
       {contextHolder}
     </Card>

@@ -20,7 +20,10 @@ export default async function ServerList() {
           <div className={styles['item-con']} key={item.id}>
             <div className={styles['col-id']}>{item.id}</div>
             <div className={styles['col-title']}>
-              <Link href={{ pathname: '/detail' + item.id }}>{item.title}</Link>
+              {/* 由服务端渲染的组件无法实现返回上一页操作，因为服务端无法获取浏览器的历史记录，因此只能使用 <Link> 来跳转到指定路由 */}
+              <Link href={{ pathname: '/detail/' + item.id }}>
+                {item.title}
+              </Link>
             </div>
           </div>
         );

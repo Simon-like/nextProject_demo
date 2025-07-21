@@ -1,29 +1,51 @@
 'use client';
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Layout, Menu } from 'antd';
-import type { MenuProps } from 'antd/lib';
+import { Layout, Menu, ConfigProvider, theme } from 'antd';
+import type { MenuProps } from 'antd';
+import { useTheme } from '@/components/themeContext';
+import { globalConfig } from '@/globalConfig';
 import {
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-
 import './sider.scss';
 
 const AntdSider = Layout.Sider;
 type MenuItem = Required<MenuProps>['items'][number];
 
+const { darkAlgorithm, defaultAlgorithm, useToken } = theme;
+
 export default function Sider() {
+  // 引入主题上下文的hook
+  const { dark } = useTheme();
+
+  // Sider的主题色，默认：light
+  let siderTheme = defaultAlgorithm;
+  // 如果全局配置了强制Sider为dark
+  if (globalConfig.siderTheme === 'dark') {
+    siderTheme = darkAlgorithm;
+  }
+  // 如果全局配置了Sider跟随主题色
+  else if ((globalConfig.siderTheme = 'theme')) {
+    siderTheme = dark ? darkAlgorithm : defaultAlgorithm;
+  }
+
+  // Antd的主题色hook
+  const { token } = useToken();
+
   // 当前路由地址
   const pathname = usePathname();
+
   // 路由hook
   const router = useRouter();
 
   // 左侧导航的开合状态
   const [collapsed, setCollapsed] = useState(false);
 
+  // 左侧导航列表
   const items: MenuItem[] = [
     {
       label: '首页',
@@ -54,30 +76,43 @@ export default function Sider() {
   const collapsedWidth = 49;
 
   return (
-    <AntdSider
-      className="M-sider"
-      trigger={null}
-      collapsed={collapsed}
-      collapsible
-      collapsedWidth={collapsedWidth}
-      width={fullWidth}
+    <ConfigProvider
+      theme={{
+        algorithm: siderTheme,
+      }}
     >
-      <div className="sider-main">
-        <Menu
-          mode="inline"
-          selectedKeys={[pathname]}
-          items={items}
-          className="sider-menu"
-          onClick={onItemClick}
-        ></Menu>
-        <div
-          className="sider-footer"
-          onClick={onCollapse}
-          style={{ color: '#ffffff' }}
-        >
-          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      <AntdSider
+        className="M-sider"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        collapsedWidth={collapsedWidth}
+        width={fullWidth}
+        style={{
+          backgroundColor: token.colorBgContainer,
+          borderColor: token.colorBorderSecondary,
+        }}
+      >
+        <div className="sider-main">
+          <Menu
+            mode="inline"
+            selectedKeys={[pathname]}
+            items={items}
+            className="sider-menu"
+            onClick={onItemClick}
+          ></Menu>
+          <div
+            className="sider-footer"
+            onClick={onCollapse}
+            style={{
+              color: token.colorTextBase,
+              borderTopColor: token.colorBorder,
+            }}
+          >
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </div>
         </div>
-      </div>
-    </AntdSider>
+      </AntdSider>
+    </ConfigProvider>
   );
 }
