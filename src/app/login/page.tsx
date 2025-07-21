@@ -55,7 +55,6 @@ export default function Login() {
             height={270}
             priority
           />
-          <div className="m-footer">公众号：卧梅又闻花</div>
         </div>
         <div className="pannel-con">
           <h3>Welcome!</h3>
